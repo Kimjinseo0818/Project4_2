@@ -16,21 +16,24 @@ public class BoardDAO {
     PreparedStatement stmt = null;
     ResultSet rs = null;
 
-    private final String BOARD_INSERT = "insert into BOARD (category, title, writer, content) values (?,?,?,?)";
-    private final String BOARD_UPDATE = "update BOARD set category=?, title=?, writer=?, content=? where seq=?";
-    private final String BOARD_DELETE = "delete from BOARD  where seq=?";
-    private final String BOARD_GET = "select * from BOARD  where seq=?";
-    private final String BOARD_LIST = "select * from BOARD order by seq desc";
+    private final String MEMBER_INSERT = "insert into MEMBER (name, photo, fromdate, phone, email, mbti, gender) values (?,?,?,?,?,?,?)";
+    private final String MEMBER_UPDATE = "update MEMBER set name=?, photo=?, fromdate=?, phone=?, email=?, mbti=?, gender=? where seq=?";
+    private final String MEMBER_DELETE = "delete from MEMBER  where seq=?";
+    private final String MEMBER_GET = "select * from MEMBER  where seq=?";
+    private final String MEMBER_LIST = "select * from MEMBER order by seq desc";
 
-    public int insertBoard(BoardVO vo) {
+    public int insertMember(BoardVO vo) {
         System.out.println("===> JDBC로 insertBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_INSERT);
-            stmt.setString(1, vo.getCategory());
-            stmt.setString(2, vo.getTitle());
-            stmt.setString(3, vo.getWriter());
-            stmt.setString(4, vo.getContent());
+            stmt = conn.prepareStatement(MEMBER_INSERT);
+            stmt.setString(1, vo.getName());
+            stmt.setString(2, vo.getPhoto());
+            stmt.setString(3, vo.getFromdate());
+            stmt.setString(4, vo.getPhone());
+            stmt.setString(5, vo.getEmail());
+            stmt.setString(6, vo.getMbti());
+            stmt.setString(7, vo.getGender());
             stmt.executeUpdate();
             return 1;
         } catch (Exception e) {
@@ -40,30 +43,51 @@ public class BoardDAO {
     }
 
     // 글 삭제
-    public void deleteBoard(BoardVO vo) {
+    public void deleteMember(int seq) {
         System.out.println("===> JDBC로 deleteBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_DELETE);
-            stmt.setInt(1, vo.getSeq());
+            stmt = conn.prepareStatement(MEMBER_DELETE);
+            stmt.setInt(1, seq);
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public int updateBoard(BoardVO vo) {
+
+    public String getPhotoFilename(int seq) {
+        String filename = null;
+        try {
+            conn = JDBCUtil.getConnection();
+            stmt = conn.prepareStatement(MEMBER_GET);
+            stmt.setInt(1, seq);
+            rs = stmt.executeQuery();
+            if(rs.next()) {
+                filename = rs.getString("photo");
+            }
+            rs.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("===> JDBC로 getPhotoFilename() 기능 처리");
+        return filename;
+    }
+    public int updateMember(BoardVO vo) {
         System.out.println("===> JDBC로 updateBoard() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_UPDATE);
-            stmt.setString(1, vo.getCategory());
-            stmt.setString(2, vo.getTitle());
-            stmt.setString(3, vo.getWriter());
-            stmt.setString(4, vo.getContent());
-            stmt.setInt(5, vo.getSeq());
+            stmt = conn.prepareStatement(MEMBER_UPDATE);
+            stmt.setString(1, vo.getName());
+            stmt.setString(2, vo.getPhoto());
+            stmt.setString(3, vo.getFromdate());
+            stmt.setString(4, vo.getPhone());
+            stmt.setString(5, vo.getEmail());
+            stmt.setString(6, vo.getMbti());
+            stmt.setString(7, vo.getGender());
+            stmt.setInt(8, vo.getSeq());
 
 
-            System.out.println(vo.getCategory() + vo.getTitle() + "-" + vo.getWriter() + "-" + vo.getContent() + "-" + vo.getSeq());
+            System.out.println(vo.getName() + vo.getFromdate() + "-" + vo.getPhone() + "-" + vo.getEmail() + "-" + vo.getMbti() + "-" + vo.getGender() + "-" + vo.getSeq());
             stmt.executeUpdate();
             return 1;
 
@@ -73,19 +97,23 @@ public class BoardDAO {
         return 0;
     }
 
-    public BoardVO getBoard(int seq) {
+    public BoardVO getMember(int seq) {
         BoardVO one = new BoardVO();
-        System.out.println("===> JDBC로 getBoard() 기능 처리");
+        System.out.println("===> JDBC로 getMember() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_GET);
+            stmt = conn.prepareStatement(MEMBER_GET);
             stmt.setInt(1, seq);
             rs = stmt.executeQuery();
             if(rs.next()) {
                 one.setSeq(rs.getInt("seq"));
-                one.setTitle(rs.getString("title"));
-                one.setWriter(rs.getString("writer"));
-                one.setContent(rs.getString("content"));
+                one.setName(rs.getString("name"));
+                one.setPhoto(rs.getString("photo"));
+                one.setFromdate(rs.getString("fromdate"));
+                one.setPhone(rs.getString("phone"));
+                one.setEmail(rs.getString("email"));
+                one.setMbti(rs.getString("mbti"));
+                one.setGender(rs.getString("gender"));
                 one.setCnt(rs.getInt("cnt"));
             }
             rs.close();
@@ -95,22 +123,24 @@ public class BoardDAO {
         return one;
     }
 
-    public List<BoardVO> getBoardList(){
+    public List<BoardVO> getMemberList(){
         List<BoardVO> list = new ArrayList<BoardVO>();
-        System.out.println("===> JDBC로 getBoardList() 기능 처리");
+        System.out.println("===> JDBC로 getMemberList() 기능 처리");
         try {
             conn = JDBCUtil.getConnection();
-            stmt = conn.prepareStatement(BOARD_LIST);
+            stmt = conn.prepareStatement(MEMBER_LIST);
             rs = stmt.executeQuery();
             while(rs.next()) {
                 BoardVO one = new BoardVO();
                 one.setSeq(rs.getInt("seq"));
-                one.setCategory(rs.getString("category"));
-                one.setTitle(rs.getString("title"));
-                one.setWriter(rs.getString("writer"));
-                one.setContent(rs.getString("content"));
+                one.setName(rs.getString("name"));
+                one.setPhoto(rs.getString("photo"));
+                one.setFromdate(rs.getString("fromdate"));
+                one.setPhone(rs.getString("phone"));
+                one.setEmail(rs.getString("email"));
+                one.setMbti(rs.getString("mbti"));
+                one.setGender(rs.getString("gender"));
                 one.setRegdate(rs.getDate("regdate"));
-                one.setModdate(rs.getDate("moddate"));
                 one.setCnt(rs.getInt("cnt"));
                 list.add(one);
             }

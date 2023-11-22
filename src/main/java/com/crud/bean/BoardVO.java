@@ -4,12 +4,14 @@ import java.util.Date;
 
 public class BoardVO {
     private int seq;
-    private String category;
-    private String title;
-    private String writer;
-    private String content;
+    private String name;
+    private String fromdate;
+    private String phone;
+    private String email;
+    private String mbti;
+    private String gender;
     private Date regdate;
-    private Date moddate;
+    private String photo;
     private int cnt;
 
     public BoardVO() {
@@ -21,36 +23,11 @@ public class BoardVO {
     public void setSeq(int seq) {
         this.seq = seq;
     }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getWriter() {
-        return writer;
-    }
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-    public String getContent() {
-        return content;
-    }
-    public void setContent(String content) {
-        this.content = content;
-    }
     public Date getRegdate() {
         return regdate;
     }
     public void setRegdate(Date regdate) {
         this.regdate = regdate;
-    }
-
-    public Date getModdate() {
-        return moddate;
-    }
-    public void setModdate(Date moddate) {
-        this.moddate = moddate;
     }
     public int getCnt() {
         return cnt;
@@ -59,12 +36,59 @@ public class BoardVO {
         this.cnt = cnt;
     }
 
-    public String getCategory() {
-        return category;
+    public String getName() {
+        return name;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String getFromdate() {
+        return fromdate;
+    }
+
+    public void setFromdate(String fromdate) {
+        this.fromdate = fromdate;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMbti() {
+        return mbti;
+    }
+
+    public void setMbti(String mbti) {
+        this.mbti = mbti;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }
